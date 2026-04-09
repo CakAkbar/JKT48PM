@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemesanan PM JKT48</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #0b1120;
+            --bg-card: #1e293b;
+            --primary: #fbbf24;
+            --primary-hover: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, #1e1b4b, var(--bg-body) 70%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        .wrapper {
+            max-width: 900px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 24px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            height: fit-content;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            margin-top: 12px;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+        }
+
+        /* Sidebar Summary */
+        .summary-list {
+            list-style: none;
+        }
+
+        .summary-list li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            border-bottom: 1px dashed rgba(255,255,255,0.05);
+            padding-bottom: 8px;
+        }
+
+        .summary-list li span:first-child {
+            color: var(--text-muted);
+        }
+
+        .summary-list li span:last-child {
+            font-weight: 600;
+            text-align: right;
+            max-width: 60%;
+            word-wrap: break-word;
+        }
+
+        .total-box {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px dashed var(--primary);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .total-box p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .total-box h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        /* QRIS Section */
+        .qris-container {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .qris-img {
+            max-width: 220px;
+            width: 100%;
+            border-radius: 16px;
+            border: 3px solid var(--primary);
+            padding: 12px;
+            background-color: #fff;
+            margin: 16px 0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .wrapper {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <div class="card">
+            <div id="step1-form">
+                <div class="header-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    Formulir Pemesanan
+                </div>
+                
+                <form id="orderForm">
+                    <div class="form-group">
+                        <label for="namaPemesan">Nama Pemesan / Nickname</label>
+                        <input type="text" id="namaPemesan" class="form-control" placeholder="Masukkan nama Anda" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="kategoriPaket">Kategori Paket</label>
+                        <select id="kategoriPaket" class="form-control" required>
+                            <option value="" disabled selected>Pilih Kategori...</option>
+                            <option value="1_bulan">Paket 1 Bulan</option>
+                            <option value="bundling">Paket Bundling</option>
+                            <option value="permanen">Paket Permanen</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="opsiMember">Opsi Member</label>
+                        <select id="opsiMember" class="form-control" required disabled>
+                            <option value="" disabled selected>Pilih Kategori Dahulu...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="groupTargetMember">
+                        <label for="targetMember">Nama Member yang Dipesan</label>
+                        <textarea id="targetMember" class="form-control" placeholder="Pisahkan nama dengan koma. (Contoh: Zee, Freya, Adel)" required></textarea>
+                        <small style="color: var(--text-muted); font-size: 0.8rem; margin-top: 6px; display: block;">Masukkan nama-nama member sesuai jumlah paket.</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Lanjut ke Pembayaran</button>
+                </form>
+            </div>
+
+            <div id="step2-qris" class="hidden">
+                <div class="header-title" style="color: #4ade80;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    Checkout Pembayaran
+                </div>
+
+                <div class="qris-container">
+                    <p style="font-weight: 600; font-size: 1rem;">Silakan Scan QRIS Berikut</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Pastikan nominal sesuai dengan Total Tagihan di samping.</p>
+                    
+                    <img src="qris.jpeg" alt="QRIS Code" class="qris-img" onerror="this.src='https://via.placeholder.com/200x200.png?text=QRIS+Anda+Disini'">
+                    
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+                        <p style="font-size: 0.85rem; color: #cbd5e1;">Setelah transfer, simpan bukti/screenshot dan klik tombol di bawah untuk mengirim format orderan ke WhatsApp Admin.</p>
+                    </div>
+
+                    <button type="button" id="btnKirimWA" class="btn btn-primary">Selesaikan Via WhatsApp</button>
+                    <button type="button" id="btnKembali" class="btn btn-outline">Kembali Edit Pesanan</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #fff;">Ringkasan Pesanan</h3>
+            
+            <ul class="summary-list">
+                <li>
+                    <span>Pemesan</span>
+                    <span id="liveNama">-</span>
+                </li>
+                <li>
+                    <span>Paket</span>
+                    <span id="livePaket">-</span>
+                </li>
+                <li>
+                    <span>Member</span>
+                    <span id="liveTarget">-</span>
+                </li>
+            </ul>
+
+            <div class="total-box">
+                <p>Total Harga</p>
+                <h2 id="liveTotal">Rp 0</h2>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dbHarga = {
+            "1_bulan": {
+                "1 Member": 5000, "3 Member": 8000, "5 Member": 10000,
+                "7 Member": 13000, "10 Member": 16000, "15 Member": 20000
+            },
+            "bundling": {
+                "ALL GEN 7 / 11": 20000, "ALL GEN 12": 25000, "ALL TRAINEE": 25000,
+                "ALL MEMBER INTI": 30000, "ALL INTI + TRAINEE": 35000
+            },
+            "permanen": {
+                "1 MEMBER": 10000, "ALL GEN 7/11/12": 30000, "ALL TRAINEE": 35000,
+                "ALL MEMBER INTI": 40000, "ALL INTI + TRAINEE": 45000
+            }
+        };
+
+        const nomorAdmin = "6282116968176";
+        let hargaSaatIni = 0;
+
+        // DOM Elements
+        const inputNama = document.getElementById('namaPemesan');
+        const inputKategori = document.getElementById('kategoriPaket');
+        const inputOpsi = document.getElementById('opsiMember');
+        const inputTarget = document.getElementById('targetMember');
+        const groupTarget = document.getElementById('groupTargetMember');
+        const form = document.getElementById('orderForm');
+        
+        const step1 = document.getElementById('step1-form');
+        const step2 = document.getElementById('step2-qris');
+
+        const liveNama = document.getElementById('liveNama');
+        const livePaket = document.getElementById('livePaket');
+        const liveTarget = document.getElementById('liveTarget');
+        const liveTotal = document.getElementById('liveTotal');
+
+        const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+
+        // Update Live Name
+        inputNama.addEventListener('input', function() {
+            liveNama.textContent = this.value || "-";
+        });
+
+        // Update Live Target (Hanya jika manual input)
+        inputTarget.addEventListener('input', function() {
+            liveTarget.textContent = this.value || "-";
+        });
+
+        // Kategori -> Opsi
+        inputKategori.addEventListener('change', function() {
+            const kat = this.value;
+            inputOpsi.innerHTML = '<option value="" disabled selected>Pilih Opsi Member...</option>';
+            hargaSaatIni = 0;
+            liveTotal.textContent = "Rp 0";
+            livePaket.textContent = "-";
+            
+            // Tampilkan kembali text area saat kategori diubah sebagai default
+            groupTarget.classList.remove('hidden');
+            inputTarget.setAttribute('required', 'true');
+            inputTarget.value = "";
+            liveTarget.textContent = "-";
+
+            if (kat && dbHarga[kat]) {
+                inputOpsi.removeAttribute('disabled');
+                Object.keys(dbHarga[kat]).forEach(opsi => {
+                    inputOpsi.innerHTML += `<option value="${opsi}">${opsi} - ${formatRp(dbHarga[kat][opsi])}</option>`;
+                });
+            } else {
+                inputOpsi.setAttribute('disabled', 'true');
+            }
+        });
+
+        inputOpsi.addEventListener('change', function() {
+            const kat = inputKategori.value;
+            const opsi = this.value;
+            const textKategori = inputKategori.options[inputKategori.selectedIndex].text;
+
+            if (kat && opsi) {
+                hargaSaatIni = dbHarga[kat][opsi];
+                liveTotal.textContent = formatRp(hargaSaatIni);
+                livePaket.textContent = `${textKategori} (${opsi})`;
+
+                if (opsi.toUpperCase().includes('ALL')) {
+                    groupTarget.classList.add('hidden');
+                    inputTarget.removeAttribute('required'); 
+                    
+                    inputTarget.value = opsi; 
+                    liveTarget.textContent = opsi;
+                } else {
+                    groupTarget.classList.remove('hidden');
+                    inputTarget.setAttribute('required', 'true'); 
+                    inputTarget.value = "";
+                    liveTarget.textContent = "-";
+                }
+            }
+        });
+
+        // Form ke QRIS
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (hargaSaatIni === 0) return;
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+        });
+
+        // Kembali Edit
+        document.getElementById('btnKembali').addEventListener('click', function() {
+            step2.classList.add('hidden');
+            step1.classList.remove('hidden');
+        });
+
+        // Eksekusi WA
+        document.getElementById('btnKirimWA').addEventListener('click', function() {
+            const nama = inputNama.value;
+            const paket = livePaket.textContent;
+            const target = inputTarget.value;
+            const total = liveTotal.textContent;
+
+            let pesan = `*ORDER PM JKT48*%0A`;
+            pesan += `=====================%0A`;
+            pesan += `👤 Nama: ${nama}%0A`;
+            pesan += `📦 Paket: ${paket}%0A`;
+            pesan += `👯‍♀️ Target: ${target}%0A`;
+            pesan += `=====================%0A`;
+            pesan += `💰 *TOTAL: ${total}*%0A%0A`;
+            pesan += `Berikut adalah bukti pembayaran QRIS saya:`;
+
+            window.open(`https://wa.me/${nomorAdmin}?text=${pesan}`, '_blank');
+        });
+    </script>
+</body>
+</html>
