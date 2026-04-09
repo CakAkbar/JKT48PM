@@ -107,6 +107,11 @@
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
         }
 
         .btn-primary {
@@ -129,6 +134,21 @@
         .btn-outline:hover {
             border-color: var(--text-main);
             color: var(--text-main);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            width: auto;
+            display: inline-flex;
+            margin-bottom: 16px;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-sm:hover {
+            background-color: var(--primary);
+            color: #000;
         }
 
         /* Sidebar Summary */
@@ -180,7 +200,7 @@
         /* QRIS Section */
         .qris-container {
             text-align: center;
-            padding: 20px 0;
+            padding: 20px 0 0 0;
         }
 
         .qris-img {
@@ -190,7 +210,7 @@
             border: 3px solid var(--primary);
             padding: 12px;
             background-color: #fff;
-            margin: 16px 0;
+            margin: 16px 0 10px 0;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
         }
 
@@ -248,7 +268,10 @@
                         <small style="color: var(--text-muted); font-size: 0.8rem; margin-top: 6px; display: block;">Masukkan nama-nama member sesuai jumlah paket.</small>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Lanjut ke Pembayaran</button>
+                    <button type="submit" class="btn btn-primary">
+                        Lanjut ke Pembayaran
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                    </button>
                 </form>
             </div>
 
@@ -263,12 +286,21 @@
                     <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Pastikan nominal sesuai dengan Total Tagihan di samping.</p>
                     
                     <img src="qris.jpeg" alt="QRIS Code" class="qris-img" onerror="this.src='https://via.placeholder.com/200x200.png?text=QRIS+Anda+Disini'">
+                    <br>
+                    
+                    <a href="qris.jpeg" download="QRIS_48clothes.jpg" class="btn btn-outline btn-sm">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Simpan QRIS ke Galeri
+                    </a>
                     
                     <div style="background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 8px; margin-bottom: 20px;">
                         <p style="font-size: 0.85rem; color: #cbd5e1;">Setelah transfer, simpan bukti/screenshot dan klik tombol di bawah untuk mengirim format orderan ke WhatsApp Admin.</p>
                     </div>
 
-                    <button type="button" id="btnKirimWA" class="btn btn-primary">Selesaikan Via WhatsApp</button>
+                    <button type="button" id="btnKirimWA" class="btn btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        Kirim Bukti ke WhatsApp
+                    </button>
                     <button type="button" id="btnKembali" class="btn btn-outline">Kembali Edit Pesanan</button>
                 </div>
             </div>
@@ -370,6 +402,7 @@
             }
         });
 
+        // Opsi -> Logika Sembunyikan Textarea jika "ALL"
         inputOpsi.addEventListener('change', function() {
             const kat = inputKategori.value;
             const opsi = this.value;
@@ -380,15 +413,21 @@
                 liveTotal.textContent = formatRp(hargaSaatIni);
                 livePaket.textContent = `${textKategori} (${opsi})`;
 
+                // Cek apakah opsi mengandung kata "ALL" (huruf besar/kecil)
                 if (opsi.toUpperCase().includes('ALL')) {
+                    // Sembunyikan Form Input Member
                     groupTarget.classList.add('hidden');
-                    inputTarget.removeAttribute('required'); 
+                    inputTarget.removeAttribute('required'); // Hilangkan wajib isi
                     
+                    // Otomatis isi data
                     inputTarget.value = opsi; 
                     liveTarget.textContent = opsi;
                 } else {
+                    // Munculkan Form Input Member
                     groupTarget.classList.remove('hidden');
-                    inputTarget.setAttribute('required', 'true'); 
+                    inputTarget.setAttribute('required', 'true'); // Wajib isi lagi
+                    
+                    // Kosongkan agar user ngetik manual
                     inputTarget.value = "";
                     liveTarget.textContent = "-";
                 }
